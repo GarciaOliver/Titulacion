@@ -14,7 +14,7 @@ if (strlen(session_id())<1)
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-  <script src="../public/js/bootstrap.bundle.min.js"></script>
+
   <!-- Font Awesome -->
 
   <link rel="stylesheet" href="../public/css/font-awesome.min.css">
@@ -23,13 +23,22 @@ if (strlen(session_id())<1)
   <link rel="stylesheet" href="../public/css/_all-skins.min.css">
   <!-- Morris chart --><!-- Daterange picker -->
 
+
+
 <!-- DATATABLES-->
 <link rel="stylesheet" href="../public/datatables/jquery.dataTables.min.css">
 <link rel="stylesheet" href="../public/datatables/buttons.dataTables.min.css">
 <link rel="stylesheet" href="../public/datatables/responsive.dataTables.min.css">
 <link rel="stylesheet" href="../public/css/bootstrap-select.min.css">
 <link rel="stylesheet" href="../public/css/daterangepicker.css">
+
 <script src="../public/js/jquery.min.js"></script>
+<script src="../public/datatables/jquery.dataTables.min.js"></script>
+<script src="../public/js/bootbox.min.js"></script>
+<script src="../public/js/dataTables.select.min.js"></script>
+<script src="../public/js/bootstrap.bundle.min.js"></script>
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini " >
 
@@ -100,7 +109,7 @@ if (strlen(session_id())<1)
 <br>
                <?php 
 
-if ($_SESSION['Docentes']==1) {
+if ($_SESSION['Admin']==1) {
   echo ' <li class="treeview">
           <a href="#">
             <i class="fa fa-folder"></i> <span>Docentes</span>
@@ -109,9 +118,10 @@ if ($_SESSION['Docentes']==1) {
             </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="listaIdiomas.php"><i class="fa fa-circle-o"></i> Idiomas</a></li>
             <li><a href="listaDocentesTodos.php"><i class="fa fa-circle-o"></i> Añadir Docente</a></li>
             <li><a href="listaDocentesIngresados.php"><i class="fa fa-circle-o"></i> Lista de Docentes</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> Estudiantes</a></li>  
+            <li><a href="estudiantesTodos.php"><i class="fa fa-circle-o"></i> Estudiantes</a></li>  
             <li><a href=""><i class="fa fa-circle-o"></i> Cambios Docentes</a></li>    
           </ul>
         </li>';

@@ -59,12 +59,8 @@ if ($_SESSION['Docentes']==1) {
 
 
 
-<script src="scripts/docentes.js"></script>
-<script>
-  $(document).ready(function(){
-    listarDocentesTodos()
-  });
-</script>
+<script src="scripts/docentesTodos.js"></script>
+
 <?php 
 }else{
  require 'noacceso.php'; 

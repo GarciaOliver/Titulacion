@@ -94,10 +94,22 @@ public function coor($usu_id){
 			return $carrera[0];
 
 	}
-public function verificar($usu_login,$usu_clave){
-	$sql="call sp_login('$usu_login','$usu_clave');";
-    //return $sql;
+public function verificarDocente($usu_login,$usu_clave){
+	$sql="call activos_ist17j.sp_logeo('$usu_login','$usu_clave');";
+
 	return ejecutarConsultaSP($sql);	
+}
+
+public function verificarEstudiante($usu_login,$usu_clave){
+	$sql="call sp_loginEst('$usu_login','$usu_clave');";
+
+	return ejecutarConsultaSP($sql);	
+}
+
+public function datosDocente($usu_id){
+	$sql="call resumenes_ist17j.sp_docentes(1, $usu_id, 0, 0, 0);";
+
+	return ejecutarConsultaSP($sql);
 }
 
 public function obten_motivos($id){

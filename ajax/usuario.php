@@ -84,10 +84,47 @@ switch ($_GET["op"]) {
 		//Hash SHA256 en la contraseña
 		$clavehash=hash("SHA256", $clavea);
 
-		$rspta=$usuario->verificar($logina, $clavehash);	
-		$fetch=$rspta->fetch_object();
+		//$rspta=$usuario->verificarDocente($logina, $clavehash);
+		$docente=$usuario->verificarDocente($logina, $clavehash);
+		$estudiante=$usuario->verificarEstudiante($logina, $clavehash);
+
+		$_SESSION['Escritorio']=0;
+		$_SESSION['Docentes']=0;
+		$_SESSION['Estudiantes']=0;
+		$_SESSION['Resumenes']=0;
+
+		if($docente->num_rows > 0){
+			$_SESSION['Escritorio']=1;
+
+			$fetch=$docente->fetch_object();
+			$_SESSION['usu_id']=$fetch->usu_id;
+			$_SESSION['usu_nombre']=$fetch->usu_nombre;
+			$_SESSION['usu_telefono']=$fetch->usu_telefono;
+			$_SESSION['Estudiantes']=1;
+
+			$docente="";
+			$docente=$usuario->datosDocente($_SESSION['usu_id']);
+			$fetch="";
+
+			//Idioma
+			$fetch=$docente->fetch_object();
+			$_SESSION['idio_id']=$fetch->idio_id;
+
+			//Permiso
+			if($fetch->doc_permiso ==1){
+				$_SESSION['Admin']=1;
+			}
+		}elseif($estudiante->num_rows > 0){
+			$_SESSION['Escritorio']=1;
+
+
 			
-		if (isset($fetch)) {
+		}else{
+			echo null;
+		}
+		//$fetch=$rspta->fetch_object();
+			
+		/*if (isset($fetch)) {
 
 			$_SESSION['Escritorio']=1;
 			$_SESSION['Docentes']=0;
@@ -95,35 +132,21 @@ switch ($_GET["op"]) {
 			$_SESSION['Resumenes']=0;
 
 			if($fetch->rol==1){
-				# Declaramos la variables de sesion
-				$_SESSION['usu_id']=$fetch->usu_id;
-				$_SESSION['usu_nombre']=$fetch->usu_nombre;
-				$_SESSION['usu_login']=$fetch->usu_login;
-				$_SESSION['usu_telefono']=$fetch->usu_telefono;
-				#Idioma
-				$_SESSION['cat_id']=$fetch->cat_id;
 				
-				#Menu
-				if($fetch->doc_permiso ==1){
-					#Permiso de adminsitrador
-					$_SESSION['Docentes']=1;
-				}
-
-				$_SESSION['Estudiantes']=1;
 
 			}else if($fetch->rol==0){
 				# Declaramos la variables de sesion
 				$_SESSION['usu_id']=$fetch->est_id;
 				$_SESSION['usu_nombre']=$fetch->est_nombre;
 				$_SESSION['usu_login']=$fetch->est_login;
-				$_SESSION['usu_telefono']=$fetch->est_telefono;
+				$_SESSION['usu_telefono']=$fetch->est_celular;
 
 				#Menu
 				$_SESSION['Resumenes']=1;
 			}
 
 		}
-		echo json_encode($fetch);
+		echo json_encode($fetch);*/
 	
 	break;
 	case 'salir':

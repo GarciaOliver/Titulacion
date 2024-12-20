@@ -34,16 +34,16 @@ if ($_SESSION['Docentes']==1) {
                                         <th>Permisos</th>
                                         <th>Estado</th>
                                         <th>Editar</th>
-                                        <th>Desactivar</th>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
                         <!-- /Fin Contenido de recuadro Tabla de docentes -->
 
-                        <div id="datosDocente">
-                            <h1>Hola Mundo</h1>
+                        <div class="container mt-4" hidden id="datosDocente">
+                            
                         </div>
+                        
                     </div>
                 </div>
 <!--box-header-->
@@ -59,14 +59,8 @@ if ($_SESSION['Docentes']==1) {
     <!-- /.content -->
 </div>
 
-<script src="scripts/docentes.js"></script>
-<script>
-    $(document).ready(function(){
-        $("#datosDocente").hide();
-        listarDocentesIngresados();
-        
-    });
-</script>
+<script src="scripts/docentesIngresados.js"></script>
+
 <?php 
 }else{
  require 'noacceso.php'; 

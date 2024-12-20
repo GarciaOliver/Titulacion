@@ -10,9 +10,9 @@ $("#frmAcceso").on('submit', function(e)
 		{
 		if (data=="null")
 			bootbox.alert("Usuario y/o Password incorrectos");
-		 else   {
-		     $(location).attr("href","escritorio.php");	
-            }
+		else{
+		    $(location).attr("href","escritorio.php");
+        }
         }
 	);
 })
