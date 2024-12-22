@@ -13,6 +13,7 @@
         break;
         case 'selectIdiomas':
             $data=$idioma->selectIdiomas();
+            $resultado='<option value="0">Seleccione un Idioma</option>';
             while ($orden=$data->fetch_object()) {
                 $resultado.='<option value="'.$orden->idio_id.'">'.$orden->idio_idioma.'</option>';
 

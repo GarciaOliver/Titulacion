@@ -9,7 +9,7 @@ if (!isset($_SESSION['usu_nombre'])) {
  
 require 'header.php';
 
-if ($_SESSION['Docentes']==1) {
+if ($_SESSION['Admin']==1) {
 
 ?>
 <div class="content-wrapper">
@@ -62,8 +62,6 @@ if ($_SESSION['Docentes']==1) {
 <script src="scripts/docentesIngresados.js"></script>
 
 <?php 
-}else{
- require 'noacceso.php'; 
 }
 
 require 'footer.php';

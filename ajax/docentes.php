@@ -1,5 +1,5 @@
 <?php
-    require "../modelos/Docentes.php";
+    require_once "../modelos/Docentes.php";
 
     $docente=new Docente();
 

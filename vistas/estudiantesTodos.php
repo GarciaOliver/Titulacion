@@ -142,8 +142,6 @@ if ($_SESSION['Docentes']==1) {
 
 
 <?php 
-}else{
- require 'noacceso.php'; 
 }
 
 require 'footer.php';

@@ -32,11 +32,31 @@ if (strlen(session_id())<1)
 <link rel="stylesheet" href="../public/css/bootstrap-select.min.css">
 <link rel="stylesheet" href="../public/css/daterangepicker.css">
 
+<!-- jQuery 3 -->
+
 <script src="../public/js/jquery.min.js"></script>
-<script src="../public/datatables/jquery.dataTables.min.js"></script>
-<script src="../public/js/bootbox.min.js"></script>
-<script src="../public/js/dataTables.select.min.js"></script>
+<script src="../public/js/moment.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<!-- Bootstrap 3.3.7 -->
 <script src="../public/js/bootstrap.bundle.min.js"></script>
+<script src="../public/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<!-- AdminLTE App -->
+<script src="../public/js/adminlte.min.js"></script>
+<script src="../public/js/daterangepicker.js"></script>
+
+<script src="../public/datatables/buttons.colVis.min.js"></script>
+<script src="../public/datatables/buttons.html5.min.js"></script>
+<script src="../public/datatables/dataTables.buttons.min.js"></script>
+<script src="../public/datatables/jquery.dataTables.min.js"></script>
+<script src="../public/datatables/jszip.min.js"></script>
+
+<script src="../public/datatables/pdfmake.min.js"></script>
+<script src="../public/datatables/vfs_fonts.js"></script>
+<script src="../public/datatables/datatables.min.js"></script>
+<script src="../public/js/bootbox.min.js"></script>
+<script src="../public/js/bootstrap-select.min.js"></script>
+
 
 
 </head>
@@ -112,13 +132,13 @@ if (strlen(session_id())<1)
 if ($_SESSION['Admin']==1) {
   echo ' <li class="treeview">
           <a href="#">
-            <i class="fa fa-folder"></i> <span>Docentes</span>
+            <i class="fa fa-folder"></i> <span>Opciones de Admin</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="listaIdiomas.php"><i class="fa fa-circle-o"></i> Idiomas</a></li>
+            <li><a href="listaIdiomas.php"><i class="fa fa-circle-o"></i>Catálogo de Idiomas</a></li>
             <li><a href="listaDocentesTodos.php"><i class="fa fa-circle-o"></i> Añadir Docente</a></li>
             <li><a href="listaDocentesIngresados.php"><i class="fa fa-circle-o"></i> Lista de Docentes</a></li>
             <li><a href="estudiantesTodos.php"><i class="fa fa-circle-o"></i> Estudiantes</a></li>  
@@ -128,10 +148,10 @@ if ($_SESSION['Admin']==1) {
 }
         ?>
                <?php 
-if ($_SESSION['Estudiantes']==1) {
+if ($_SESSION['Docentes']==1) {
   echo ' <li class="treeview">
           <a href="#">
-            <i class="fa fa-th"></i> <span>Estudiantes</span>
+            <i class="fa fa-th"></i> <span>Opciones de Docente</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -146,7 +166,7 @@ if ($_SESSION['Estudiantes']==1) {
         ?>
         
                <?php 
-if ($_SESSION['Resumenes']==1) {
+if ($_SESSION['Estudiantes']==1) {
   echo '<li class="treeview">
           <a href="#">
             <i class="fa fa-folder"></i> <span>Resúmenes</span>
@@ -155,7 +175,7 @@ if ($_SESSION['Resumenes']==1) {
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href=""><i class="fa fa-circle-o"></i>Subir resúmen</a></li>
+            <li><a href="subirResumen.php"><i class="fa fa-circle-o"></i>Subir resúmenes</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i>Subir documentación</a></li>
           </ul>
         </li>';

@@ -9,7 +9,7 @@ if (!isset($_SESSION['usu_nombre'])) {
  
 require 'header.php';
 
-if ($_SESSION['Admin']==1) {
+if ($_SESSION['Docentes']==1) {
 
 ?>
 
@@ -30,10 +30,10 @@ if ($_SESSION['Admin']==1) {
                             <table id="tablaDocentes" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Cédula</th>
-                                        <th>Teléfono</th>
-                                        <th>Añadir</th>
+                                        <th>Estudiante</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th>Opciones</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -59,7 +59,7 @@ if ($_SESSION['Admin']==1) {
 
 
 
-<script src="scripts/docentesTodos.js"></script>
+<script src=""></script>
 
 <?php 
 }

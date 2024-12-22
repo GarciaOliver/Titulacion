@@ -112,11 +112,6 @@ public function datosDocente($usu_id){
 	return ejecutarConsultaSP($sql);
 }
 
-public function obten_motivos($id){
-	$sql="CALL sp_catalgo('scpa', 0,0,$id);";
-	return ejecutarConsultaSP($sql);
-}
-
 }
 
 ?>

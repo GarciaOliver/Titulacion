@@ -89,9 +89,9 @@ switch ($_GET["op"]) {
 		$estudiante=$usuario->verificarEstudiante($logina, $clavehash);
 
 		$_SESSION['Escritorio']=0;
+		$_SESSION['Admin']=0;
 		$_SESSION['Docentes']=0;
 		$_SESSION['Estudiantes']=0;
-		$_SESSION['Resumenes']=0;
 
 		if($docente->num_rows > 0){
 			$_SESSION['Escritorio']=1;
@@ -100,7 +100,9 @@ switch ($_GET["op"]) {
 			$_SESSION['usu_id']=$fetch->usu_id;
 			$_SESSION['usu_nombre']=$fetch->usu_nombre;
 			$_SESSION['usu_telefono']=$fetch->usu_telefono;
-			$_SESSION['Estudiantes']=1;
+
+			#Menu Docentes
+			$_SESSION['Docentes']=1;
 
 			$docente="";
 			$docente=$usuario->datosDocente($_SESSION['usu_id']);
@@ -117,36 +119,20 @@ switch ($_GET["op"]) {
 		}elseif($estudiante->num_rows > 0){
 			$_SESSION['Escritorio']=1;
 
+			$fetch=$estudiante->fetch_object();
+
+			$_SESSION['usu_id']=$fetch->est_id;
+			$_SESSION['usu_nombre']=$fetch->est_nombre;
+			$_SESSION['usu_login']=$fetch->est_login;
+			$_SESSION['usu_telefono']=$fetch->est_celular;
+
+			#Menu Estudiantes
+			$_SESSION['Estudiantes']=1;
 
 			
 		}else{
 			echo null;
 		}
-		//$fetch=$rspta->fetch_object();
-			
-		/*if (isset($fetch)) {
-
-			$_SESSION['Escritorio']=1;
-			$_SESSION['Docentes']=0;
-			$_SESSION['Estudiantes']=0;
-			$_SESSION['Resumenes']=0;
-
-			if($fetch->rol==1){
-				
-
-			}else if($fetch->rol==0){
-				# Declaramos la variables de sesion
-				$_SESSION['usu_id']=$fetch->est_id;
-				$_SESSION['usu_nombre']=$fetch->est_nombre;
-				$_SESSION['usu_login']=$fetch->est_login;
-				$_SESSION['usu_telefono']=$fetch->est_celular;
-
-				#Menu
-				$_SESSION['Resumenes']=1;
-			}
-
-		}
-		echo json_encode($fetch);*/
 	
 	break;
 	case 'salir':

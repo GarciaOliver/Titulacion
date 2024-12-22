@@ -1,0 +1,6 @@
+projectKey=resumenes
+serverUrl=http://localhost:9000
+serverVersion=24.12.0.100206
+dashboardUrl=http://localhost:9000/dashboard?id=resumenes
+ceTaskId=90ba1a2a-3553-4670-a673-2613d50a6e1e
+ceTaskUrl=http://localhost:9000/api/ce/task?id=90ba1a2a-3553-4670-a673-2613d50a6e1e
