@@ -157,7 +157,7 @@ if ($_SESSION['Docentes']==1) {
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href=""><i class="fa fa-circle-o"></i>Calificar resumenes</a></li>
+            <li><a href="listaAsignacionesPendientes.php"><i class="fa fa-circle-o"></i>Calificar resumenes</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i>Estudiantes aprobados</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i>Estudiantes pendientes</a></li>
           </ul>

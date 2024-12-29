@@ -26,8 +26,8 @@ if ($_SESSION['Docentes']==1) {
                     <div class="box-header with-border" align="center">
 
                         <!-- Contenido de recuadro Tabla de docentes -->
-                        <div id="datatablaDocentes" name="datatablaDocentes" class="box-body table-responsive">
-                            <table id="tablaDocentes" class="table table-striped table-bordered">
+                        <div id="datatablaAsignaciones" name="datatablaAsignaciones" class="box-body table-responsive">
+                            <table id="tablaAsignaciones" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Estudiante</th>
@@ -39,7 +39,8 @@ if ($_SESSION['Docentes']==1) {
                             </table>
                         </div>
                         <!-- /Fin Contenido de recuadro Tabla de docentes -->
-
+                        <div id="datosResumen">
+                        </div>
                     </div>
                 </div>
 <!--box-header-->
@@ -59,7 +60,7 @@ if ($_SESSION['Docentes']==1) {
 
 
 
-<script src=""></script>
+<script src="scripts/asignacionesPendientes.js"></script>
 
 <?php 
 }

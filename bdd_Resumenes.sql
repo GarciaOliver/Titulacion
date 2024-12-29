@@ -258,6 +258,23 @@ BEGIN
 		insert into resumen(est_id, idio_id, res_resumen, res_palabras_clave, res_fecha, cat_id)
 			values(est_id_sp, idio_id_sp, res_resumen_sp, res_palabras_clave_sp, CURDATE(), cat_id_sp);
     end if;
+    if(op=1) then
+		SELECT
+			r.res_id,
+            r.res_resumen,
+            r.res_palabras_clave,
+            r.res_fecha,
+            es.est_nombre,
+            i.idio_idioma
+		FROM 
+			resumen r
+        INNER JOIN
+			estudiantes_ist17j.estudiante es ON r.est_id = es.est_id
+		INNER JOIN 
+			idioma i ON i.idio_id = r.idio_id
+		WHERE 
+			r.res_id=res_id_sp;
+    end if;
     
 END
 // DELIMITER ;
@@ -278,6 +295,34 @@ BEGIN
 	if(op=0) then
 		insert into resumen(est_id, idio_id, res_resumen, res_palabras_clave, res_fecha, cat_id)
 			values(est_id_sp, idio_id_sp, res_resumen_sp, res_palabras_clave_sp, CURDATE(), cat_id_sp);
+    end if;
+    if(op=1) then
+		SELECT 
+			a.asig_id,
+            a.res_id,
+			e.est_id,
+			es.est_nombre,
+			d.usu_id,
+			ds.usu_nombre,
+            c.cat_estado,
+			a.asig_fecha
+		FROM 
+			asignacion a
+		INNER JOIN 
+			resumen r ON a.res_id = r.res_id
+		INNER JOIN 
+			estudiante e ON r.est_id = e.est_id
+		INNER JOIN 
+			estudiantes_ist17j.estudiante es ON e.est_id = es.est_id
+		INNER JOIN 
+			docente d ON a.usu_id = d.usu_id
+		INNER JOIN 
+			activos_ist17j.usuario ds ON d.usu_id = ds.usu_id
+		INNER JOIN
+			catalogo_estado c ON a.cat_id = c.cat_id
+		WHERE 
+			a.cat_id = 5
+			AND d.usu_id = usu_id_sp;
     end if;
     
 END
