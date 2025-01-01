@@ -22,10 +22,10 @@ function listarDocentesIngresados() {
             "url": "../ajax/docentes.php?op=listarDocentesIngresados"
         },
         columnDefs: [
-            { orderable: false, targets: [4] },
-            { searchable: false, targets: [4] },
+            { orderable: false, targets: [3] },
+            { searchable: false, targets: [3] },
             { width: "50%", targets: [0] },
-            { width: "10%", targets: [2, 3] },
+            { width: "10%", targets: [2] },
             { width: "20%", targets: [1] }
         ],
         columns: [
@@ -34,11 +34,6 @@ function listarDocentesIngresados() {
             {
                 "data": "doc_permiso", "render": function (data) {
                     return data == 1 ? 'Admin' : 'Docente';
-                }
-            },
-            {
-                "data": "cat_id", "render": function (data) {
-                    return data == 1 ? 'Activo' : 'Inactivo';
                 }
             },
             {
@@ -76,27 +71,10 @@ function mostrarDatos(valor, usu_id) {
     }
 }
 
-function eliminarDocente(usu_id, cat_id) {
-    $.post("../ajax/docentes.php?op=editarDocente",
-        { usu_id: usu_id, cat_id: cat_id },
-        function (data) {
-            if (data == true) {
-
-                recargarTabla();
-                mostrarDatos(false, 0);
-                alert("Docente Eliminado");
-            } else {
-                alert("Error al eliminar docente: " + data);
-            }
-        }
-    );
-}
-
 function editarDocente(usu_id) {
-    let estado = $('#estado').val();
     let permiso = $('#permiso').val();
     $.post("../ajax/docentes.php?op=editarDocente",
-        { usu_id: usu_id, doc_permiso: permiso, cat_id: estado },
+        { usu_id: usu_id, doc_permiso: permiso },
         function (data) {
             if (data == true) {
                 

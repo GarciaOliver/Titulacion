@@ -4,7 +4,7 @@
         public function __construct(){}
 
         public function asignacionesPendientes($usu_id){
-            $consulta = "call resumenes_ist17j.sp_asignaciones(1, 0, 0, $usu_id, '1999-01-01', 0);";
+            $consulta = "call resumenes_ist17j.sp_asignaciones(1, 0, 0, $usu_id, 0);";
             $resultado = ejecutarConsultaSP($consulta);
             if ($resultado->num_rows > 0) {
                 $data = [];
@@ -19,7 +19,13 @@
         }
 
         public function datosResumen($res_id){
-            $consulta = "call resumenes_ist17j.sp_resumenes(1, $res_id, 0, 0, '', '', '1999-01-01', 0);";
+            $consulta = "call resumenes_ist17j.sp_resumenes(1, $res_id, 0, 0, '', '', 0);";
+            $resultado = ejecutarConsultaSP($consulta);
+            return $resultado;
+        }
+
+        public function enviarCalificacion($asig_id, $cat_id, $rev_observaciones){
+            $consulta = "call resumenes_ist17j.sp_revisiones(0, 0, $asig_id, '$rev_observaciones', '', $cat_id);";
             $resultado = ejecutarConsultaSP($consulta);
             return $resultado;
         }

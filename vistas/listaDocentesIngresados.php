@@ -32,7 +32,6 @@ if ($_SESSION['Admin']==1) {
                                         <th>Nombre</th>
                                         <th>Cédula</th>
                                         <th>Permisos</th>
-                                        <th>Estado</th>
                                         <th>Editar</th>
                                     </tr>
                                 </thead>

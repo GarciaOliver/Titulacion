@@ -1,3 +1,4 @@
+-- Nombre BDD: resumenes_ist17j
 CREATE TABLE catalogo_estado (
     cat_id int AUTO_INCREMENT primary key,
     cat_estado VARCHAR(50)
@@ -22,9 +23,7 @@ CREATE TABLE docente (
     usu_id int primary key,
     idio_id int,
     doc_permiso boolean,
-    cat_id int,
     FOREIGN KEY (idio_id) REFERENCES idioma(idio_id),
-    FOREIGN KEY (cat_id) REFERENCES catalogo_estado(cat_id),
     FOREIGN KEY (usu_id) REFERENCES activos_ist17j.usuario(usu_id)
 );
 
@@ -34,7 +33,7 @@ CREATE TABLE resumen (
     idio_id int,
     res_resumen TEXT,
     res_palabras_clave VARCHAR(255),
-    res_fecha DATE,
+    res_fecha DATETIME,
     cat_id int,
     FOREIGN KEY (idio_id) REFERENCES idioma(idio_id),
     FOREIGN KEY (cat_id) REFERENCES catalogo_estado(cat_id),
@@ -45,7 +44,7 @@ CREATE TABLE asignacion (
     asig_id int AUTO_INCREMENT primary key,
     res_id int,
     usu_id int,
-    asig_fecha DATE,
+    asig_fecha DATETIME,
     cat_id int,
     FOREIGN KEY (cat_id) REFERENCES catalogo_estado(cat_id),
     FOREIGN KEY (res_id) REFERENCES resumen(res_id),
@@ -55,8 +54,8 @@ CREATE TABLE asignacion (
 CREATE TABLE revision (
     rev_id INT AUTO_INCREMENT PRIMARY KEY,
     asig_id INT,
-    rev_observaciones VARCHAR(255),
-    rev_fecha DATE,
+    rev_observaciones text,
+    rev_fecha DATETIME,
 	rev_archivo varchar(255),
     cat_id int,
     FOREIGN KEY (cat_id) REFERENCES catalogo_estado(cat_id),
@@ -112,12 +111,11 @@ CREATE PROCEDURE sp_docentes(
 	IN op int,
     IN usu_id_sp int,
     IN idio_id_sp int,
-    IN doc_permiso_sp tinyint,
-    IN cat_id_sp int)
+    IN doc_permiso_sp tinyint)
 BEGIN
 	-- Añadir nuevo docente
 	if(op=0) then
-		insert into docente values(usu_id_sp,idio_id_sp,doc_permiso_sp,cat_id_sp);
+		insert into docente values(usu_id_sp,idio_id_sp,doc_permiso_sp);
 	end if;
 	
     -- Buscar docente
@@ -129,8 +127,7 @@ BEGIN
 			activos_ist17j.usuario.usu_telefono,
             resumenes_ist17j.idioma.idio_id,
 			resumenes_ist17j.idioma.idio_idioma,
-			resumenes_ist17j.docente.doc_permiso, 
-			resumenes_ist17j.catalogo_estado.cat_estado
+			resumenes_ist17j.docente.doc_permiso
 		FROM 
 			activos_ist17j.usuario
 		JOIN 
@@ -139,9 +136,6 @@ BEGIN
 		JOIN 
 			resumenes_ist17j.idioma 
 			ON resumenes_ist17j.docente.idio_id = resumenes_ist17j.idioma.idio_id
-		JOIN
-        resumenes_ist17j.catalogo_estado
-			ON resumenes_ist17j.docente.cat_id = resumenes_ist17j.catalogo_estado.cat_id
 		WHERE 
 			activos_ist17j.usuario.usu_id = usu_id_sp;
 
@@ -150,18 +144,17 @@ BEGIN
     -- Modificar docente
     if(op=2) then
 		UPDATE docente SET 
-            doc_permiso = doc_permiso_sp,
-            cat_id = cat_id_sp
+            doc_permiso = doc_permiso_sp
         WHERE usu_id = usu_id_sp;
 	end if;
     
     -- Listar docentes ingresados
     if(op=3) then
-		SELECT d.usu_id, u.usu_nombre, u.usu_cedula, d.idio_id, d.doc_permiso, d.cat_id
+		SELECT d.usu_id, u.usu_nombre, u.usu_cedula, d.idio_id, d.doc_permiso
 		FROM activos_ist17j.usuario AS u
 		JOIN resumenes_ist17j.docente AS d 
 			ON u.usu_id = d.usu_id
-		WHERE d.usu_id != usu_id_sp and d.idio_id = idio_id_sp;
+		WHERE d.usu_id != usu_id_sp and d.idio_id = idio_id_sp AND u.usu_condicion = '1';
 	end if;
     
     -- Listar docentes NO ingresados
@@ -186,10 +179,13 @@ CREATE PROCEDURE sp_idiomas(
     IN idio_dependencia_sp int,
     IN cat_id_sp int)
 BEGIN
+	-- Insertar idioma
 	if(op=0) then
 		insert into idioma(idio_idioma,idio_dependencia,cat_id)
 			values(idio_idioma_sp,idio_dependencia_sp,cat_id_sp);
 	end if;
+    
+    -- Muestra todos los idiomas
     if(op=1) then
 		SELECT 
 			i1.idio_id,
@@ -208,6 +204,8 @@ BEGIN
 			i1.idio_dependencia = i2.idio_id
 		WHERE i1.cat_id=1;
     end if;
+    
+    -- Modifica los datos de un idioma
     if(op=2) then
 		UPDATE idioma SET 
             idio_idioma = idio_idioma_sp,
@@ -249,21 +247,23 @@ CREATE PROCEDURE sp_resumenes(
 	IN idio_id_sp int,
 	IN res_resumen_sp text,
 	IN res_palabras_clave_sp varchar(255),
-	IN res_fecha_sp date,
 	IN cat_id_sp int
 )
 BEGIN
-
+	-- Insertar resumen
 	if(op=0) then
 		insert into resumen(est_id, idio_id, res_resumen, res_palabras_clave, res_fecha, cat_id)
-			values(est_id_sp, idio_id_sp, res_resumen_sp, res_palabras_clave_sp, CURDATE(), cat_id_sp);
+			values(est_id_sp, idio_id_sp, res_resumen_sp, res_palabras_clave_sp, NOW(), cat_id_sp);
     end if;
+    
+    -- Muestra un resumen segun el estudiante y el idioma
     if(op=1) then
 		SELECT
 			r.res_id,
             r.res_resumen,
             r.res_palabras_clave,
             r.res_fecha,
+            a.asig_id,
             es.est_nombre,
             i.idio_idioma
 		FROM 
@@ -272,8 +272,20 @@ BEGIN
 			estudiantes_ist17j.estudiante es ON r.est_id = es.est_id
 		INNER JOIN 
 			idioma i ON i.idio_id = r.idio_id
+		INNER JOIN 
+			asignacion a ON r.res_id = r.res_id
 		WHERE 
 			r.res_id=res_id_sp;
+    end if;
+    
+    -- Muestra si un estudiante tiene ASIGNACIONES en proceso segun el idioma
+    if(op=2) then
+		SELECT a.asig_id
+        FROM asignacion a
+        JOIN
+			resumen r ON a.res_id = r.res_id
+        WHERE
+			r.est_id=est_id_sp AND r.idio_id=idio_id_sp AND (a.cat_id=5 OR a.cat_id=4);
     end if;
     
 END
@@ -287,15 +299,15 @@ CREATE PROCEDURE sp_asignaciones(
     IN asig_id_sp int, 
 	IN res_id_sp int,
     IN usu_id_sp int,
-	IN asig_fecha_sp date,
 	IN cat_id_sp int
 )
 BEGIN
 
 	if(op=0) then
-		insert into resumen(est_id, idio_id, res_resumen, res_palabras_clave, res_fecha, cat_id)
-			values(est_id_sp, idio_id_sp, res_resumen_sp, res_palabras_clave_sp, CURDATE(), cat_id_sp);
+		insert into asignacion(res_id, usu_id, asig_fecha, cat_id)
+			values(res_id_sp, usu_id_sp, NOW(), cat_id_sp);
     end if;
+    -- Muestra todas las asignaciones En proceso (cat_id=5)
     if(op=1) then
 		SELECT 
 			a.asig_id,
@@ -325,10 +337,40 @@ BEGIN
 			AND d.usu_id = usu_id_sp;
     end if;
     
+    -- Cambiar estado de una asignación
+    if(op=2) then
+		UPDATE asignacion SET 
+            cat_id = cat_id_sp
+        WHERE asig_id = asig_id_sp;
+    end if;
 END
 // DELIMITER ;
 
--- SP Crear Asignación cuando se crea Resumen Trigger ---------------------------------------------------------------------------
+-- SP REVISION ------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+CREATE PROCEDURE sp_revisiones(
+	IN op int,
+    IN rev_id_sp int,
+    IN asig_id_sp int,
+    IN rev_observaciones_sp text,
+    IN rev_archivo_sp varchar(255),
+    IN cat_id_sp int
+)
+BEGIN
+
+	-- Insertar revision
+	if(op=0) then
+		insert into revision(asig_id, rev_observaciones, rev_fecha,cat_id)
+			values(asig_id_sp, rev_observaciones_sp, NOW(), cat_id_sp);
+		call resumenes_ist17j.sp_asignaciones(2, asig_id_sp, 0, 0, 6);
+	end if;
+    
+    
+END
+// DELIMITER ;
+
+-- SP Crear Asignación cuando se crea un Resumen -> Trigger ---------------------------------------------------------------------------
 
 DELIMITER //
 
@@ -336,32 +378,68 @@ CREATE TRIGGER tr_crearAsignacion
 AFTER INSERT ON resumen
 FOR EACH ROW
 BEGIN
-    CALL sp_crearAsignacionTrigger(NEW.res_id,NEW.idio_id);
+	if exists(SELECT 
+			a.asig_id,
+			r.res_id,
+			a.usu_id
+		FROM asignacion a
+		LEFT JOIN resumen r ON r.res_id = a.res_id
+		WHERE r.est_id=1
+	) then
+        CALL sp_crearAsigRepeticion(NEW.est_id,NEW.res_id,NEW.idio_id);
+	else 
+		CALL sp_crearAsigNoRepeticion(NEW.res_id,NEW.idio_id);
+	end if;
 END //
 
 DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE sp_crearAsignacionTrigger(IN res_id_nuevo INT, IN idio_id_resumen INT)
+CREATE PROCEDURE sp_crearAsigRepeticion(IN est_id_resumen INT, IN res_id_nuevo INT, IN idio_id_resumen INT)
+BEGIN
+	DECLARE usu_id_asignado INT;
+    
+    SELECT a.usu_id INTO usu_id_asignado
+	FROM asignacion a
+	LEFT JOIN resumen r ON r.res_id = a.res_id
+	WHERE 
+		r.est_id = 1
+	ORDER BY 
+		a.asig_fecha DESC
+	LIMIT 1;
+    
+    insert into asignacion(res_id, usu_id, asig_fecha, cat_id)
+			values(res_id_nuevo, usu_id_asignado, NOW(), 5);
+    
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_crearAsigNoRepeticion(IN res_id_nuevo INT, IN idio_id_resumen INT)
 BEGIN
     DECLARE total_docentes_idioma INT;
     DECLARE indice_docente INT;
     DECLARE usu_id_asignado INT;
     DECLARE offset_value INT;
 
-    SELECT COUNT(*) INTO total_docentes_idioma FROM docente WHERE cat_id = 1 AND idio_id = idio_id_resumen;
+    SELECT COUNT(*) INTO total_docentes_idioma FROM docente 
+    INNER JOIN activos_ist17j.usuario ds ON docente.usu_id = ds.usu_id 
+    WHERE ds.usu_condicion = 1 AND idio_id = idio_id_resumen;
     SET indice_docente = (SELECT COUNT(*) FROM asignacion WHERE res_id IN (SELECT res_id FROM resumen WHERE idio_id = idio_id_resumen)) % total_docentes_idioma + 1;
 
 	SET offset_value = IF(indice_docente - 1 > 0, indice_docente - 1, 0);
 
-    SELECT usu_id INTO usu_id_asignado FROM docente
-		WHERE cat_id = 1 AND idio_id = idio_id_resumen
+    SELECT docente.usu_id INTO usu_id_asignado FROM docente
+    INNER JOIN activos_ist17j.usuario ds ON docente.usu_id = ds.usu_id 
+		WHERE ds.usu_condicion = 1 AND idio_id = idio_id_resumen
 		LIMIT 1
 		OFFSET offset_value;
-
-    INSERT INTO asignacion (res_id, usu_id, asig_fecha, cat_id)
-    VALUES (res_id_nuevo, usu_id_asignado, CURDATE(), 5); 
+	
+    insert into asignacion(res_id, usu_id, asig_fecha, cat_id)
+			values(res_id_nuevo, usu_id_asignado, NOW(), 5);
 
 END //
 

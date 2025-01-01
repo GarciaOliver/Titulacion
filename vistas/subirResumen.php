@@ -55,7 +55,7 @@ if ($_SESSION['Estudiantes']==1) {
                                     </div>
                                     <!-- Espaciado adicional -->
                                     <div class="d-flex justify-content-end mt-4">
-                                        <button type="button" class="btn btn-primary me-3" onclick="guardarResumen()">Guardar Resumen</button>
+                                        <button id="guardar"type="button" class="btn btn-primary me-3" onclick="guardarResumen()">Guardar Resumen</button>
                                     </div>
                                 </div>
                             </div>

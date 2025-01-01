@@ -107,7 +107,7 @@ public function verificarEstudiante($usu_login,$usu_clave){
 }
 
 public function datosDocente($usu_id){
-	$sql="call resumenes_ist17j.sp_docentes(1, $usu_id, 0, 0, 0);";
+	$sql="call resumenes_ist17j.sp_docentes(1, $usu_id, 0, 0);";
 
 	return ejecutarConsultaSP($sql);
 }

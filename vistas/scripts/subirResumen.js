@@ -15,7 +15,25 @@ function mostrarVistaResumen(){
     $('#resumen').val("");
 
     if(valor!=0){
-        $("#datosResumen").show();
+        
+        $.ajax({
+            type: "POST",
+            url: "../ajax/estudiantes.php?op=resumenPendiente",
+            data: { idioma: valor},
+            success: function (datos) {
+                if(datos==true){
+                    $("#resumen").prop('disabled', true);
+                    $("#palabras").prop('disabled', true);
+                    $("#guardar").prop('disabled', true);
+                }else{
+                    $("#resumen").prop('disabled', false);
+                    $("#palabras").prop('disabled', false);
+                    $("#guardar").prop('disabled', false);
+                }
+                $("#datosResumen").show();
+            }
+        });
+        
     }else{
         $("#datosResumen").hide();
     }
@@ -55,6 +73,7 @@ function guardarResumen(){
                 success: function (datos) {
                     if(datos==true){
                         alert("Resumen Enviado Correctamente");
+                        location.reload();
                     }else{
                         alert("Error en el Envio de Datos");
                     }

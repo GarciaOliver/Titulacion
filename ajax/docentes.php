@@ -77,29 +77,12 @@
                                         <option value="1" selected>Administrador</option>
                                     </select>';
                 }
+                $resultado .= '</div>';
+                
                 $resultado .= '
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="estado" class="form-label">Estado:</label>';
-                if ($orden->cat_estado == "activo") {
-                    $resultado .= '
-                                    <select id="estado" class="form-select">
-                                        <option value="1" selected>Activo</option>
-                                        <option value="2">Inactivo</option>
-                                    </select>';
-                } else if ($orden->cat_estado == "inactivo") {
-                    $resultado .= '
-                                    <select id="estado" class="form-select">
-                                        <option value="1">Activo</option>
-                                        <option value="2" selected>Inactivo</option>
-                                    </select>';
-                }
-                $resultado .= '
-                                </div>
                             </div>
                             <!-- Botones principales con espacio adicional -->
                             <div class="d-flex justify-content-end gap-3 mt-4">
-                                <button type="button" onClick="eliminarDocente('.$_POST['usu_id'].',3)" class="btn btn-danger">Eliminar docente</button>
                                 <button type="button" onClick="editarDocente('.$_POST['usu_id'].')" class="btn btn-primary">Guardar cambios</button>
                                 <button type="button" onClick="mostrarDatos(false,0)" class="btn btn-secondary">Cancelar</button>
                             </div>
@@ -114,7 +97,7 @@
 
         break;
         case 'editarDocente':
-            $data=$docente->editarDocente($_POST['usu_id'],$_POST['doc_permiso'],$_POST['cat_id']);
+            $data=$docente->editarDocente($_POST['usu_id'],$_POST['doc_permiso']);
             echo $data;
         break;
         

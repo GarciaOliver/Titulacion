@@ -58,15 +58,56 @@ function mostrarDatos(valor){
     }
 }
 
+function vistaObservaciones(){
+    $("#datos").hide();
+    $("#botones").hide();
+    $("#observaciones").show();
+}
+
 function datosResumen(res_id){
     $.post("../ajax/asignaciones.php?op=datosResumen",
         {res_id: res_id},
         function (data) {
             mostrarDatos(true);
             $("#datosResumen").html(data);
-            //alert("Resumen calificado correctamente");
+            $("#enviar").hide();
         }
     );
+}
+
+function enviarCalificacion(valor, asig_id){
+    if(valor==true){
+        $.post("../ajax/asignaciones.php?op=enviarCalificacion",
+            {asig_id: asig_id,
+                calificacion: 'Aprobado',
+                observaciones: 'Aprobado'
+            },
+            function (data) {
+                if(data==true){
+                    alert("Calificación enviada exitosamente");
+                }else{
+                    alert("Error en el envío de la calificación");
+                }
+                location.reload();
+            }
+        );
+    }else{
+        let observaciones=$("#txtObservaciones").val();
+        $.post("../ajax/asignaciones.php?op=enviarCalificacion",
+            {asig_id: asig_id,
+                calificacion: 'Rechazado',
+                observaciones: observaciones
+            },
+            function (data) {
+                if(data==true){
+                    alert("Calificación enviada exitosamente");
+                }else{
+                    alert("Error en el envío de la calificación");
+                }
+                location.reload();
+            }
+        );
+    }
 }
 
 $(document).ready(function () {

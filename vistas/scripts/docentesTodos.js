@@ -43,6 +43,12 @@ function listarDocentesTodos(){
     $('#tablaDocentes').DataTable(dataTableOpciones);
 }
 
+function recargarTabla() {
+    if (window.tablaDocentes) {
+        window.tablaDocentes.ajax.reload(null, false);
+    }
+}
+
 function añadirDocente(data){
     $.ajax({
         type:"POST",
@@ -51,13 +57,13 @@ function añadirDocente(data){
         success: function(datos) {
             if(datos==true){
                 alert("Servicio registrado exitosamente");
+                location.reload();
             }else{
                 alert("Error en el registro de servicio");
             }
         }
     });
 
-    
 }
 
 $(document).ready(function(){
