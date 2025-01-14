@@ -299,6 +299,7 @@ CREATE PROCEDURE sp_asignaciones(
     IN asig_id_sp int, 
 	IN res_id_sp int,
     IN usu_id_sp int,
+    IN est_id_sp int,
 	IN cat_id_sp int
 )
 BEGIN
@@ -307,6 +308,7 @@ BEGIN
 		insert into asignacion(res_id, usu_id, asig_fecha, cat_id)
 			values(res_id_sp, usu_id_sp, NOW(), cat_id_sp);
     end if;
+    
     -- Muestra todas las asignaciones En proceso (cat_id=5)
     if(op=1) then
 		SELECT 
@@ -343,6 +345,47 @@ BEGIN
             cat_id = cat_id_sp
         WHERE asig_id = asig_id_sp;
     end if;
+    
+    -- Muestra todas las asignaciones de un estudiante
+    if(op=3) then
+		SELECT a.asig_id,
+			a.asig_fecha,
+			ac.usu_nombre,
+			i.idio_idioma,
+			c.cat_estado
+		FROM asignacion a
+		LEFT JOIN resumen r ON r.res_id = a.res_id
+		LEFT JOIN activos_ist17j.usuario ac ON a.usu_id = ac.usu_id
+		LEFT JOIN catalogo_estado c ON c.cat_id = a.cat_id
+		LEFT JOIN idioma i ON i.idio_id = r.idio_id
+		WHERE 
+			r.est_id=est_id_sp
+		ORDER BY 
+			a.asig_fecha DESC;
+    end if;
+    
+    -- Muestra los datos de una asignacion junto con los datos de su revisión
+    if(op=4) then
+		SELECT rv.rev_observaciones,
+			rv.rev_fecha,
+			a.asig_fecha,
+			r.res_resumen,
+			r.res_palabras_clave,
+			i.idio_idioma,
+			ac.usu_nombre,
+			e.est_nombre,
+			rv.cat_id,
+			c.cat_estado
+		FROM asignacion a
+		LEFT JOIN revision rv ON a.asig_id = rv.asig_id
+		LEFT JOIN resumen r ON r.res_id = a.res_id
+		LEFT JOIN activos_ist17j.usuario ac ON a.usu_id = ac.usu_id
+		LEFT JOIN estudiantes_ist17j.estudiante e ON e.est_id = r.est_id
+		LEFT JOIN catalogo_estado c ON c.cat_id = rv.cat_id
+		LEFT JOIN idioma i ON i.idio_id = r.idio_id
+		WHERE 
+			a.asig_id=asig_id_sp;
+    end if;
 END
 // DELIMITER ;
 
@@ -363,10 +406,8 @@ BEGIN
 	if(op=0) then
 		insert into revision(asig_id, rev_observaciones, rev_fecha,cat_id)
 			values(asig_id_sp, rev_observaciones_sp, NOW(), cat_id_sp);
-		call resumenes_ist17j.sp_asignaciones(2, asig_id_sp, 0, 0, 6);
+		call resumenes_ist17j.sp_asignaciones(2, asig_id_sp, 0, 0, 0, 6);
 	end if;
-    
-    
 END
 // DELIMITER ;
 

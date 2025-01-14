@@ -140,8 +140,7 @@ if ($_SESSION['Admin']==1) {
           <ul class="treeview-menu">
             <li><a href="listaIdiomas.php"><i class="fa fa-circle-o"></i>Catálogo de Idiomas</a></li>
             <li><a href="listaDocentesTodos.php"><i class="fa fa-circle-o"></i> Añadir Docente</a></li>
-            <li><a href="listaDocentesIngresados.php"><i class="fa fa-circle-o"></i> Lista de Docentes</a></li>
-            <li><a href="estudiantesTodos.php"><i class="fa fa-circle-o"></i> Estudiantes</a></li>  
+            <li><a href="listaDocentesIngresados.php"><i class="fa fa-circle-o"></i> Lista de Docentes</a></li>  
             <li><a href=""><i class="fa fa-circle-o"></i> Cambios Docentes</a></li>    
           </ul>
         </li>';
@@ -176,7 +175,7 @@ if ($_SESSION['Estudiantes']==1) {
           </a>
           <ul class="treeview-menu">
             <li><a href="subirResumen.php"><i class="fa fa-circle-o"></i>Subir resúmenes</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i>Subir documentación</a></li>
+            <li><a href="listaResumenesEst.php"><i class="fa fa-circle-o"></i>Resúmenes enviados</a></li>
           </ul>
         </li>';
 }

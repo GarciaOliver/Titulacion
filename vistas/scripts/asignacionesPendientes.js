@@ -1,12 +1,12 @@
-function listarDocentesIngresados() {
+function listarTabla() {
     let dataTableOpciones = {
         lengthMenu: [5, 10, 20, 40, 80, 100],
         pageLength: 5,
         language: {
             lengthMenu: "Mostrar _MENU_ registros por página",
-            zeroRecords: "Ningún usuario encontrado",
+            zeroRecords: "Ningún registro encontrado",
             info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
-            infoEmpty: "Ningún usuario encontrado",
+            infoEmpty: "Ningún registro encontrado",
             infoFiltered: "(filtrados desde _MAX_ registros totales)",
             search: "Buscar:",
             loadingRecords: "Cargando...",
@@ -111,5 +111,5 @@ function enviarCalificacion(valor, asig_id){
 }
 
 $(document).ready(function () {
-    listarDocentesIngresados();
+    listarTabla();
 });
