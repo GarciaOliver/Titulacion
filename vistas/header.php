@@ -176,6 +176,7 @@ if ($_SESSION['Estudiantes']==1) {
           <ul class="treeview-menu">
             <li><a href="subirResumen.php"><i class="fa fa-circle-o"></i>Subir resúmenes</a></li>
             <li><a href="listaResumenesEst.php"><i class="fa fa-circle-o"></i>Resúmenes enviados</a></li>
+            <li><a href="envioDocumento.php"><i class="fa fa-circle-o"></i>Subir Documentación</a></li>
           </ul>
         </li>';
 }
