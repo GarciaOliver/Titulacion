@@ -394,6 +394,9 @@ END
 DELIMITER //
 CREATE PROCEDURE sp_revisiones(
 	IN op int,
+    IN est_id_sp int,
+    IN usu_id_sp int,
+    IN idio_id_sp int,
     IN rev_id_sp int,
     IN asig_id_sp int,
     IN rev_observaciones_sp text,
@@ -408,6 +411,66 @@ BEGIN
 			values(asig_id_sp, rev_observaciones_sp, NOW(), cat_id_sp);
 		call resumenes_ist17j.sp_asignaciones(2, asig_id_sp, 0, 0, 0, 6);
 	end if;
+    -- Mostrar revision aprobada por idioma y estudiante
+    if(op=1) then
+		SELECT rev_id FROM revision rv
+        LEFT JOIN asignacion a ON a.asig_id = rv.asig_id
+		LEFT JOIN resumen r ON r.res_id = a.res_id
+        WHERE rv.cat_id=4 AND r.idio_id=idio_id_sp AND r.est_id=est_id_sp
+        LIMIT 1;
+    end if;
+    if(op=2) then 
+		SELECT rev_id, rev_archivo FROM revision rv
+        LEFT JOIN asignacion a ON a.asig_id = rv.asig_id
+        LEFT JOIN resumen r ON r.res_id = a.res_id
+        WHERE r.est_id=est_id_sp;
+    end if;
+END
+// DELIMITER ;
+
+-- SP Documentacion -------------------------------------------------------------------------------------------------
+
+DELIMITER //
+CREATE PROCEDURE sp_documentacion(
+	IN op int,
+    IN est_id_sp int,
+    IN idio_id_sp int,
+    IN rev_id_sp int,
+    IN rev_archivo_sp varchar(255)
+)
+BEGIN
+	DECLARE rev_id_asignado INT;
+	-- Guardar nombre del archivo(segun su idioma y estudiante)
+	if(op=0) then
+		SELECT rev_id INTO rev_id_asignado
+        FROM revision rv
+        LEFT JOIN asignacion a ON a.asig_id = rv.asig_id
+        LEFT JOIN resumen r ON r.res_id = a.res_id
+        WHERE r.est_id=est_id_sp AND r.idio_id=idio_id_sp AND (rv.cat_id=4 OR rv.cat_id=8);
+        
+        UPDATE revision SET 
+            rev_archivo = rev_archivo_sp
+        WHERE rev_id=rev_id_asignado;
+	end if;
+-- Eliminar archivo(Borra el nombre de la base)
+    if(op=1) then
+		SELECT rev_id INTO rev_id_asignado
+        FROM revision rv
+        LEFT JOIN asignacion a ON a.asig_id = rv.asig_id
+        LEFT JOIN resumen r ON r.res_id = a.res_id
+        WHERE r.est_id=est_id_sp AND rv.rev_archivo=rev_archivo_sp;
+        
+        UPDATE revision SET 
+            rev_archivo = NULL
+        WHERE rev_id=rev_id_asignado;
+	end if;
+-- Listar documentos enviados del estudiante
+    if(op=2) then
+		SELECT rev_id, rev_archivo FROM revision rv
+        LEFT JOIN asignacion a ON a.asig_id = rv.asig_id
+        LEFT JOIN resumen r ON r.res_id = a.res_id
+        WHERE r.est_id=est_id_sp AND rv.rev_archivo IS NOT NULL AND (rv.cat_id=4 OR rv.cat_id=8);
+    end if;
 END
 // DELIMITER ;
 
@@ -485,21 +548,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
--- SP revisiones aprobadas por estudiante----------------------------------------
-
-DELIMITER //
-CREATE PROCEDURE sp_revisionesAprobEstudiante(
-    IN est_id_sp INT
-)
-BEGIN
-
-	SELECT * FROM revision r
-		INNER JOIN asignacion a ON r.asig_id = a.asig_id
-		INNER JOIN resumen re ON a.res_id = re.res_id
-		WHERE re.est_id = est_id_sp
-			AND r.cat_id = 4;
-    
-END
-// DELIMITER ;
-

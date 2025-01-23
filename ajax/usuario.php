@@ -99,6 +99,7 @@ switch ($_GET["op"]) {
 			$fetch=$docente->fetch_object();
 			$_SESSION['usu_id']=$fetch->usu_id;
 			$_SESSION['usu_nombre']=$fetch->usu_nombre;
+			$_SESSION['usu_cedula']=$fetch->usu_cedula;
 			$_SESSION['usu_telefono']=$fetch->usu_telefono;
 
 			#Menu Docentes
@@ -123,6 +124,7 @@ switch ($_GET["op"]) {
 
 			$_SESSION['usu_id']=$fetch->est_id;
 			$_SESSION['usu_nombre']=$fetch->est_nombre;
+			$_SESSION['usu_cedula']=$fetch->est_cedula;
 			$_SESSION['usu_login']=$fetch->est_login;
 			$_SESSION['usu_telefono']=$fetch->est_celular;
 

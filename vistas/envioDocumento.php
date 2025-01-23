@@ -19,25 +19,49 @@ if ($_SESSION['Estudiantes']==1) {
         <!-- Default box -->
         <div class="row">
             <div class="col-md-12">
-                <h1>Subir Documentación Firmada</h1>
+                <h1>Documentación Firmada</h1>
                 <div class="box">
                     
                     <div class="box-header with-border text-center">
-
-                        <table>
+                        <h3 style="text-align: left;">Subir documentación</h3>
+                        <table style="width: 100%;">
+                                <tr>
+                                <td colspan="2">
+                                    <label for="nombreArchivo" class="form-label">Nombre del Archivo</label>
+                                    <input type="text" class="form-control" id="nombreArchivo" readonly>
+                                </td>
+                            </tr>
                             <tr>
-                                <td>
-                                    <select id="idioma" class="form-select" aria-label="Default select example">
+                                <td style="text-align: left;">
+                                    <label for="idioma" class="form-label">Idioma</label>
+                                    <select id="idioma" class="form-select" onchange="nombreTemporal()">
                                     </select>
                                 </td>
-                                <td>
-                                    <label for="formFile" class="form-label">Default file input example</label>
-                                    <input class="form-control" type="file" id="archivo">
+                                <td style="text-align: left;">
+                                    <form id="formulario" method="post">
+                                        <label for="archivo" class="form-label">Seleccione el documento</label>
+                                        <input class="form-control" type="file" name="archivo" id="archivo" accept=".pdf">
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding-top: 20px;">
+                                    <button class="btn btn-primary" id="btnGuardar" onclick="enviarDocumento()">Enviar</button>
                                 </td>
                             </tr>
                         </table>
                         
-                        <button onclick="enviarDocumento()">Enviar Documento</button>
+                        <!--Tabla de documentos enviados-->
+                        <h3 style="text-align: left;">Documentos Enviados</h3>
+                        <table id="documentosEnviadosTabla">
+                            <thead>
+                                <tr>
+                                    <th>Nombre del archivo</th>
+                                    <th>Descargar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                        </table>
                 
                         
                     </div>

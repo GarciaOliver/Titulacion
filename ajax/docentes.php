@@ -9,13 +9,11 @@
     switch ($_GET["op"]) {
         case 'listarDocentesIngresados':
             $data=$docente->listarDocentesIngresados($_SESSION['usu_id'],$_SESSION['idio_id']);
-
             echo json_encode($data,JSON_UNESCAPED_UNICODE);
             
         break;
         case 'listarDocentesTodos':
             $data=$docente->listarDocentesTodos($_SESSION['usu_id']);
-
             echo json_encode($data,JSON_UNESCAPED_UNICODE);
         break;
         case 'agregarDocente':

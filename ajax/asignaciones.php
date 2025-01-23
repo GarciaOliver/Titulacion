@@ -110,5 +110,12 @@
                     </div>';
             echo $resultado;
         break;
+        case 'nombreArchivo':
+            $idioma=$_POST['idioma'];
+            $est_nombre=str_replace(' ', '-', $_SESSION['usu_nombre']);
+            $nombre=$est_nombre.'_'.$_SESSION['usu_cedula'].'_'.$idioma;
+            echo "$nombre";
+        break;
+        
     }
 ?>

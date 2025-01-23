@@ -166,15 +166,15 @@ if ($_SESSION['Docentes']==1) {
         
                <?php 
 if ($_SESSION['Estudiantes']==1) {
-  echo '<li class="treeview">
+  echo '<li class="treeview" id="menu-resumenes">
           <a href="#">
             <i class="fa fa-folder"></i> <span>Resúmenes</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu">
-            <li><a href="subirResumen.php"><i class="fa fa-circle-o"></i>Subir resúmenes</a></li>
+          <ul class="treeview-menu" id="submenu-resumenes">
+            <li><a href="subirResumen.php" id="link-subir-resumenes"><i class="fa fa-circle-o"></i>Subir resúmenes</a></li>
             <li><a href="listaResumenesEst.php"><i class="fa fa-circle-o"></i>Resúmenes enviados</a></li>
             <li><a href="envioDocumento.php"><i class="fa fa-circle-o"></i>Subir Documentación</a></li>
           </ul>
