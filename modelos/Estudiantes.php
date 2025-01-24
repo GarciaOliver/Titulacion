@@ -11,7 +11,13 @@
         }
 
         public function resumenPendiente($est_id, $idio_id){
-            $consulta = "call resumenes_ist17j.sp_resumenes(2, 0, $est_id, $idio_id, '0', '0', 0);";
+            $consulta = "call resumenes_ist17j.sp_resumenes(2, 0, $est_id, $idio_id, '', '', 0);";
+            $resultado = ejecutarConsultaSP($consulta);
+            return $resultado;
+        }
+
+        public function verificacionDependencia($est_id, $idio_id){
+            $consulta = "call resumenes_ist17j.sp_resumenes(3, 0, $est_id, $idio_id, '', '', 0);";
             $resultado = ejecutarConsultaSP($consulta);
             return $resultado;
         }

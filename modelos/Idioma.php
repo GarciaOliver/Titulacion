@@ -5,7 +5,7 @@
         public function __construct(){}
 
         public function listarIdiomas(){
-            $consulta = "call resumenes_ist17j.sp_idiomas(1, 0, '0', 0, 0);";
+            $consulta = "call resumenes_ist17j.sp_idiomas(1, 0, '', 0, 0);";
             $resultado = ejecutarConsultaSP($consulta);
                 if ($resultado->num_rows > 0) {
                     $data = [];

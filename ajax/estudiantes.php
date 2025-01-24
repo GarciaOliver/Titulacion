@@ -21,7 +21,13 @@
             }else{
                 echo false;
             }
-            
         break;
+        case 'verificacionDependencia':
+            $data=$estudiante->verificacionDependencia($_SESSION['usu_id'], $_POST['idioma']);
+            if ($data->num_rows>0) {
+                echo true;
+            }else{
+                echo false;
+            }
     }
 ?>

@@ -180,10 +180,12 @@ use League\OAuth2\Client\Provider\Google;
                 // Forzar nombre del archivo con extensión .pdf
                 $nombreArchivoDescarga = $nombreArchivo.".pdf";
 
+                // Encabezados para forzar la descarga del archivo en pdf
                 header('Content-Type: application/pdf');
                 header('Content-Disposition: attachment; filename="' . $nombreArchivoDescarga . '"');
                 header('Content-Length: ' . $fileSize);
 
+                // Enviar el contenido del archivo en bloques de 1 KB(Descargar)
                 while (!$fileContent->getBody()->eof()) {
                     echo $fileContent->getBody()->read(1024); // Enviar bloques de 1 KB
                 }

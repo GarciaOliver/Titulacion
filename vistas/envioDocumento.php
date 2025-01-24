@@ -50,7 +50,7 @@ if ($_SESSION['Estudiantes']==1) {
                                 </td>
                             </tr>
                         </table>
-                        
+                        <hr style="background-color: lightblue;">
                         <!--Tabla de documentos enviados-->
                         <h3 style="text-align: left;">Documentos Enviados</h3>
                         <table id="documentosEnviadosTabla">

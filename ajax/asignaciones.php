@@ -44,14 +44,95 @@
             echo $data;
         break;
         case 'asignacionesEstudiante':
-            $data = $asignacion->asignacionesEstudiante($_SESSION['usu_id']);
-            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+            $datos = $asignacion->asignacionesEstudiante($_SESSION['usu_id']);
+            $data = []; // Inicializar el arreglo
+            
+            while ($orden = $datos->fetch_object()) {
+                $data[] = [
+                    "usu_nombre" =>$orden->usu_nombre,
+                    "asig_fecha" =>$orden->asig_fecha,
+                    "idio_idioma" =>$orden->idio_idioma,
+                    "cat_estado" =>$orden->cat_estado,
+                    "asig_id" =>$orden->asig_id
+                ];
+            }
+            $response = ["data" => $data];
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
         break;
         case 'datosRevisionEst':
             $data=$asignacion->datosRevision($_POST['asig_id']);
             $orden=$data->fetch_object();
             
-            $resultado = '
+            $resultado = '<table style="width: 100%;">
+                <tr>
+                    <td style="padding-right: 15px;">
+                        <label for="docente" class="form-label">Docente responsable de la revisión</label>
+                        <input class="form-control" id="docente" type="text" value="' . $orden->usu_nombre . '" readonly>
+                    </td>
+                    <td>
+                        <label for="fechaEnvio" class="form-label">Fecha y hora de envío</label>
+                        <input class="form-control" id="fechaEnvio" type="text" value="' . $orden->asig_fecha . '" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 15px;">
+                        <label for="idioma" class="form-label">Idioma</label>
+                        <input class="form-control" id="idioma" type="text" value="' . $orden->idio_idioma . '" readonly>
+                    </td>';
+            if (!$orden->cat_id == null){
+                $resultado.='<td>
+                    <label for="estado" class="form-label">Estado</label>
+                    <input class="form-control" id="estado" type="text" value="' . $orden->cat_estado . '" readonly>
+                </td>';
+            }else{
+                $resultado.='<td>
+                    <label for="estado" class="form-label">Estado</label>
+                    <input class="form-control" id="estado" type="text" value="Aún no se ha revisado" readonly>
+                </td>';
+            }
+            $resultado.='</tr>
+                <tr>
+                    <td style="padding-right: 15px;">
+                        <label for="palabras" class="form-label">Palabras clave</label>
+                        <input class="form-control" id="palabras" type="text" value="' . $orden->res_palabras_clave . '" readonly>
+                    </td>';
+            if (!$orden->cat_id == null){
+                $resultado.='<td>
+                    <label for="fechaRevision" class="form-label">Fecha y hora de revisión</label>
+                    <input class="form-control" id="fechaRevision" type="text" value="' . $orden->rev_fecha . '" readonly>
+                </td>';
+            }else{
+                $resultado.='<td></td>';
+            }
+            $resultado.='</tr>
+                <tr>
+                    <td colspan=2>
+                        <label for="resumen" class="form-label">Resumen</label>
+                        <textarea class="form-control" id="resumen" rows="8" readonly>' . $orden->res_resumen . '</textarea>
+                    </td>
+                </tr>';
+            if (!$orden->cat_id == null){
+                $resultado.='<tr>
+                    <td colspan=2>
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="observaciones" rows="4" readonly>' . $orden->rev_observaciones . '</textarea>
+                    </td>
+                </tr>';
+            }
+            $resultado.='<tr>
+                <td style="text-align: right; padding-top: 10px; padding-right: 15px;">
+                    <input type="button" class="btn btn-primary mb-3" value="Volver" onclick="datosRevision(false)">
+                </td>';
+            if (!$orden->cat_id == null){
+                $resultado.='<td style="padding-top: 10px;">
+                    <a href="../reportes/docResumen.php?id='.$_POST['asig_id'].'" class="btn btn-primary">Descargar archivo</a>
+                </td>';
+            }else{
+                $resultado.='<td></td>';
+            }
+            $resultado.='</tr>';
+            $resultado.='</table>';
+            /*'
                     <div id="datos" class="container">
                         <div class="row">
                             <label for="docente" class="form-label">Docente responsable de la revisión</label>
@@ -107,7 +188,7 @@
             $resultado .= '
                     <div class="text-center mb-3">
                         <input type="button" class="btn btn-primary mb-3" value="Volver" onclick="datosRevision(false)">
-                    </div>';
+                    </div>';*/
             echo $resultado;
         break;
         case 'nombreArchivo':

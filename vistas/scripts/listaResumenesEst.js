@@ -18,8 +18,9 @@ function listarTabla() {
             }
         },
         ajax: {
-            "method": "POST",
-            "url": "../ajax/asignaciones.php?op=asignacionesEstudiante"
+            method: "POST",
+            url: "../ajax/asignaciones.php?op=asignacionesEstudiante",
+            dataSrc: 'data'
         },
         columnDefs: [
             { orderable: false, targets: [4] },

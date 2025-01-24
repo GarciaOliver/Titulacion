@@ -250,6 +250,7 @@ CREATE PROCEDURE sp_resumenes(
 	IN cat_id_sp int
 )
 BEGIN
+	DECLARE idio_id_asignado INT;
 	-- Insertar resumen
 	if(op=0) then
 		insert into resumen(est_id, idio_id, res_resumen, res_palabras_clave, res_fecha, cat_id)
@@ -278,16 +279,41 @@ BEGIN
 			r.res_id=res_id_sp;
     end if;
     
-    -- Muestra si un estudiante tiene ASIGNACIONES en proceso segun el idioma
+    -- Muestra si un estudiante tiene ASIGNACIONES en proceso segun el idioma o revisiones aprobadas
     if(op=2) then
-		SELECT a.asig_id
-        FROM asignacion a
-        JOIN
-			resumen r ON a.res_id = r.res_id
-        WHERE
-			r.est_id=est_id_sp AND r.idio_id=idio_id_sp AND (a.cat_id=5 OR a.cat_id=4);
+		if exists(SELECT a.asig_id
+					FROM asignacion a
+					JOIN resumen r ON a.res_id = r.res_id
+					WHERE r.est_id=est_id_sp AND r.idio_id=idio_id_sp AND a.cat_id=5
+				)then
+			SELECT a.asig_id
+			FROM asignacion a
+			JOIN resumen r ON a.res_id = r.res_id
+			WHERE r.est_id=est_id_sp AND r.idio_id=idio_id_sp AND a.cat_id=5;
+		else
+			SELECT rev_id
+            FROM revision rv
+            JOIN asignacion a  ON a.asig_id = rv.asig_id
+            JOIN resumen r ON a.res_id = r.res_id
+            WHERE r.est_id=est_id_sp AND r.idio_id=idio_id_sp AND rv.cat_id=4;
+        end if;
     end if;
-    
+-- Verificación de dependencia para el envio de resúmenes
+    if(op=3)then
+		SELECT idio_dependencia INTO idio_id_asignado
+		FROM idioma
+		WHERE idio_id=idio_id_sp;
+        
+        if(idio_id_asignado!=0) then
+			SELECT rev_id
+			FROM revision rv
+			JOIN asignacion a  ON a.asig_id = rv.asig_id
+			JOIN resumen r ON a.res_id = r.res_id
+			WHERE r.est_id=est_id_sp AND r.idio_id=idio_id_asignado AND rv.cat_id=4;
+		else
+			SELECT 1 AS rev_id;
+        end if;
+    end if;
 END
 // DELIMITER ;
 
@@ -488,7 +514,7 @@ BEGIN
 			a.usu_id
 		FROM asignacion a
 		LEFT JOIN resumen r ON r.res_id = a.res_id
-		WHERE r.est_id=1
+		WHERE r.est_id=NEW.est_id AND r.idio_id=NEW.idio_id
 	) then
         CALL sp_crearAsigRepeticion(NEW.est_id,NEW.res_id,NEW.idio_id);
 	else 
@@ -508,7 +534,7 @@ BEGIN
 	FROM asignacion a
 	LEFT JOIN resumen r ON r.res_id = a.res_id
 	WHERE 
-		r.est_id = 1
+		r.est_id = est_id_resumen
 	ORDER BY 
 		a.asig_fecha DESC
 	LIMIT 1;

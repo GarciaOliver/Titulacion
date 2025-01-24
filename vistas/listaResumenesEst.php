@@ -15,14 +15,12 @@ if ($_SESSION['Estudiantes']==1) {
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-
         <!-- Default box -->
         <div class="row">
             <div class="col-md-12">
-                <h1>Lista de docentes registrados</h1>
+                <h1>Lista de solicitudes de revisión</h1>
                 <div class="box">
-                    
-                    <div class="box-header with-border text-center">
+                    <div class="box-header with-border">
 
                         <!-- Contenido de recuadro Tabla de docentes -->
                         <div id="datatablaAsignaciones" name="datatablaDocentes" class="table-responsive">
@@ -40,7 +38,7 @@ if ($_SESSION['Estudiantes']==1) {
                         </div>
                         <!-- /Fin Contenido de recuadro Tabla de docentes -->
 
-                        <div class="container mt-4" hidden id="datosRevision">
+                        <div hidden id="datosRevision">
                             
                         </div>
                         

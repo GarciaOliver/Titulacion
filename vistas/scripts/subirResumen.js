@@ -11,8 +11,15 @@ function comboIdiomas(){
 
 function mostrarVistaResumen(){
     let valor=$("#idioma").val();
+    valor=parseInt(valor);
     $('#palabras').val("");
     $('#resumen').val("");
+
+    if(valor==0){
+        $("#resumen").prop('disabled', true);
+        $("#palabras").prop('disabled', true);
+        $("#guardar").prop('disabled', true);
+    }
 
     if(valor!=0){
         
@@ -26,16 +33,25 @@ function mostrarVistaResumen(){
                     $("#palabras").prop('disabled', true);
                     $("#guardar").prop('disabled', true);
                 }else{
-                    $("#resumen").prop('disabled', false);
-                    $("#palabras").prop('disabled', false);
-                    $("#guardar").prop('disabled', false);
+                    $.ajax({
+                        type: "POST",
+                        url: "../ajax/estudiantes.php?op=verificacionDependencia",
+                        data: { idioma: valor},
+                        success: function (datos) {
+                            if(datos!=true){
+                                $("#resumen").prop('disabled', true);
+                                $("#palabras").prop('disabled', true);
+                                $("#guardar").prop('disabled', true);
+                            }else{
+                                $("#resumen").prop('disabled', false);
+                                $("#palabras").prop('disabled', false);
+                                $("#guardar").prop('disabled', false);
+                            }
+                        }
+                    });
                 }
-                $("#datosResumen").show();
             }
         });
-        
-    }else{
-        $("#datosResumen").hide();
     }
 }
 
@@ -44,12 +60,23 @@ function contarPalabras(){
     let palabras = texto.trim().split(/\s+/); 
     let totalPalabras = palabras[0] === "" ? 0 : palabras.length;
 
-    if (totalPalabras > 250) {
-        $("#alertaIdioma").show();
-        return false;
+    let caracteresEspeciales = /[^\w\sáéíóúÁÉÍÓÚñÑ.,;:!?()¿¡-]/;
+
+    if (caracteresEspeciales.test(texto)) {
+        $("#textoAlerta").text("El resumen contiene caracteres especiales no permitidos");
+        $("#alerta").show();
+        $("#guardar").prop('disabled', true);
+    }else if (totalPalabras > 250) {
+        $("#textoAlerta").text("El resumen no puede tener más de 250 palabras");
+        $("#alerta").show();
+        $("#guardar").prop('disabled', true);
+    }else if(totalPalabras < 150){
+        $("#textoAlerta").text("El resumen no puede tener menos de 150 palabras");
+        $("#alerta").show();
+        $("#guardar").prop('disabled', true);
     }else{
-        $("#alertaIdioma").hide();
-        return true;
+        $("#alerta").hide();
+        $("#guardar").prop('disabled', false);
     }
 }
 
@@ -75,7 +102,7 @@ function guardarResumen(){
                         alert("Resumen Enviado Correctamente");
                         location.reload();
                     }else{
-                        alert("Error en el Envio de Datos");
+                        alert("Error en el envio de Datos");
                     }
                    }
             });
